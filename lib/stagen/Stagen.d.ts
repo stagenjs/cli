@@ -12,7 +12,10 @@ export declare class Stagen {
     private _workerStates;
     private _progress;
     private _progressValue;
-    constructor(templateFile: string, rootDir: string, outputDir: string);
+    private _configFile;
+    private _config;
+    private _assetsDir;
+    constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string);
     private _setProgressTotal;
     private _updateProgress;
     private _incrementProgress;

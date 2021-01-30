@@ -34,7 +34,8 @@ let processFile = async (data: Record<any, any>): Promise<void> => {
     let output: string = await EJS.renderFile(workerData.templateFile, {
         content: md.render(data.markdown),
         context,
-        metadata
+        metadata,
+        config: workerData.config
     });
 
     let outputFile: string = page.replace(workerData.rootDir, workerData.outputDir).replace(/\.md$/, '.html');

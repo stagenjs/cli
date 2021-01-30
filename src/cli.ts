@@ -5,14 +5,14 @@ import {Stagen} from '../stagen/Stagen';
 import {version} from '../package.json';
 
 program.name('stagen');
-
-// const pkg: any = require('../package.json');
 program.version(version, '-v, --version');
 
 program.option('--verbose', 'Enable additional log output');
 program.option('-i <directory>', 'Input directory. Defaults to cwd');
 program.option('-t <templateFile>', 'A template EJS. Defaults to ./template/index.ejs');
+program.option('-a <assetsDirectory>', 'The assets directory. Defaults to ./template/assets');
 program.option('-o <directory>', 'Output directory. Defaults to ./public');
+program.option('-c <configFile>', 'Path to config file. Defaults to ./stagen.yml');
 
 program.parse(process.argv);
 
@@ -41,7 +41,23 @@ program.parse(process.argv);
         outputDir = Path.resolve(process.cwd(), './public');
     }
 
-    let stagen: Stagen = new Stagen(templateFile, entryPath, outputDir);
+    let configFile: string = null;
+    if (program.c) {
+        configFile = Path.resolve(process.cwd(), program.c);
+    }
+    else {
+        configFile = Path.resolve(process.cwd(), './stagen.yml');
+    }
+
+    let assetsDir: string = null;
+    if (program.a) {
+        assetsDir = Path.resolve(process.cwd(), program.a);
+    }
+    else {
+        assetsDir = Path.resolve(process.cwd(), './template/assets');
+    }
+
+    let stagen: Stagen = new Stagen(templateFile, entryPath, outputDir, configFile, assetsDir);
 
     await stagen.execute();
 })();

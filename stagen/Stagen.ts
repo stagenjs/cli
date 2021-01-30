@@ -1,11 +1,12 @@
 
-import * as FileSystem from 'fs';
+import * as FileSystem from 'fs-extra';
 import * as Path from 'path';
 import * as OS from 'os';
 import * as WorkerThreads from 'worker_threads';
 import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
 import {Bar, Presets} from 'cli-progress';
+import * as YAML from 'yaml';
 
 enum ProcessingState {
     METADATA,
@@ -39,11 +40,16 @@ export class Stagen {
     private _workerStates: Record<number, WorkerState>;
     private _progress: Bar;
     private _progressValue: number;
+    private _configFile: string;
+    private _config: Record<any, any>;
+    private _assetsDir: string;
 
-    public constructor(templateFile: string, rootDir: string, outputDir: string) {
+    public constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string) {
         this._templateFile = templateFile;
+        this._configFile = configFile;
         this._rootDir = rootDir;
         this._outputDir = outputDir;
+        this._assetsDir = assetsDir;
         this._workerExitPromises = [];
         this._metadataQueue = null;
         this._processingQueue = null;
@@ -58,6 +64,10 @@ export class Stagen {
         this._progress = new Bar({
             format: '[{bar}] {percentage}%    {text}',
         }, Presets.shades_classic);
+
+        this._config = YAML.parse(FileSystem.readFileSync(Path.resolve(this._configFile), {
+            encoding: 'utf8'
+        }));
     }
 
     // private _setProgressText(text: string): void {
@@ -97,7 +107,9 @@ export class Stagen {
         this._workers = this._initWorkers();
 
         await Promise.all(this._workerExitPromises);
-        
+
+        FileSystem.copySync(this._assetsDir, Path.resolve(this._outputDir, 'assets'));
+
         this._progress.stop();
     }
 
@@ -139,7 +151,8 @@ export class Stagen {
             workerData: {
                 rootDir: this._rootDir,
                 templateFile: this._templateFile,
-                outputDir: this._outputDir
+                outputDir: this._outputDir,
+                config: this._config
             }
         });
         worker.on('message', (packet: IPacket) => {
