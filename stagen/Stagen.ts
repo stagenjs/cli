@@ -56,7 +56,7 @@ export class Stagen {
         this._workerStates = {};
         this._progressValue = 0;
         this._progress = new Bar({
-            format: '[{bar}] {value}/{total}    {text}',
+            format: '[{bar}] {percentage}%    {text}',
         }, Presets.shades_classic);
     }
 

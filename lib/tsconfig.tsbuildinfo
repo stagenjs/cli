@@ -477,7 +477,7 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "455ee2407b82d60f075a3e27089cd4346852482ff1822a3a72742ec9bdfd315f",
+        "version": "3aba3af2d5ea4d0494ef5abc296c505a89ce75256766b64febd2e2b2f7860a7c",
         "signature": "65934930ec477c43d3fb9036d04f52830eccfe980a3fad9eda19b2b60eeac678",
         "affectsGlobalScope": false
       },
