@@ -1,7 +1,8 @@
 
 import {
     parentPort,
-    workerData
+    workerData,
+    threadId
 } from 'worker_threads'
 import * as FileSystem from 'fs';
 import * as MarkdownIt from 'markdown-it';
@@ -9,34 +10,31 @@ import * as YAML from 'yaml';
 import * as Path from 'path';
 import * as EJS from 'ejs';
 import {IPacket} from './IPacket';
+import {WorkerState} from './WorkerState';
 
 let md: MarkdownIt = MarkdownIt();
 
-console.log('WORKER DATA', workerData);
+let currentState: WorkerState = WorkerState.IDLE;
 
-let currentState: string = 'idle';
-
-let sendCurrentState = () => {
+let setState = (state: WorkerState): void => {
+    currentState = state;
     parentPort.postMessage({
-        code: 'state',
+        code: 'state-update',
         data: currentState
     });
-};
+}
 
-let processFile = async (page: string): Promise<void> => {
-    currentState = 'processing';
+let processFile = async (data: Record<any, any>): Promise<void> => {
+    setState(WorkerState.PROCESSING);
 
-    console.log('PROCESSING', page);
-    let content: string = FileSystem.readFileSync(page, {
-        encoding: 'utf8'
-    });
-
-    let markdown: Record<any, any> = parseMetadata(content);
-    let body: string = md.render(markdown.content, markdown.metadata);
+    let page: string = data.page;
+    let context: Record<any, any> = data.context;
+    let metadata: Record<any, any> = data.metadata;
 
     let output: string = await EJS.renderFile(workerData.templateFile, {
-        ...markdown.metadata,
-        content: body
+        content: md.render(data.markdown),
+        context,
+        metadata
     });
 
     let outputFile: string = page.replace(workerData.rootDir, workerData.outputDir).replace(/\.md$/, '.html');
@@ -47,8 +45,7 @@ let processFile = async (page: string): Promise<void> => {
 
     FileSystem.writeFileSync(outputFile, output);
 
-    currentState = 'idle';
-    sendCurrentState();
+    setState(WorkerState.IDLE);
 }
 
 let parseMetadata = (contents: string): Record<any, any> => {
@@ -63,21 +60,46 @@ let parseMetadata = (contents: string): Record<any, any> => {
     }
 
     return {
-        content: contents,
+        contents,
         metadata
-    }
+    };
+}
+
+let processMetadata = (page: string): void => {
+    setState(WorkerState.PROCESSING);
+
+    let content: string = FileSystem.readFileSync(page, {
+        encoding: 'utf8'
+    });
+
+    let result: Record<any, any> = parseMetadata(content);
+
+    parentPort.postMessage({
+        code: 'metadata-response',
+        data: {
+            page: page,
+            contents: result.contents,
+            metadata: result.metadata
+        }
+    });
+
+    setState(WorkerState.IDLE);
 }
 
 parentPort.on('message', (packet: IPacket) => {
     switch (packet.code) {
-        case 'process':
+        case 'process-markdown':
             processFile(packet.data);
             break;
+        case 'process-metadata':
+            processMetadata(packet.data);
+            break;
         case 'currentState':
-            sendCurrentState();
+            setState(currentState);
             break;
         case 'exit': process.exit(0);
+        default: throw new Error('Unknown action code: ' + packet.code);
     }
 });
 
-sendCurrentState();
+setState(currentState);

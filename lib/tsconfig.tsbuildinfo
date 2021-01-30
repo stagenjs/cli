@@ -231,9 +231,14 @@
         "signature": "ab9517fef0df34bd2ee27f275dff06c4b7f5bc9f9ae0779e67ab29d65a593af0",
         "affectsGlobalScope": false
       },
+      "../stagen/WorkerState.ts": {
+        "version": "ca8cb8b0ee744b34bcbdeb9ce015072258d7c0140db9cb5f57c1479004ca1b24",
+        "signature": "bdad1e45fc7b72365d77663e2cb0f2caed2376889f9f2dbf54934907a71211e3",
+        "affectsGlobalScope": false
+      },
       "../stagen/Stagen.ts": {
-        "version": "5e950d1ac86bf055cc9257787b67b2f33cadc0d29c3d05e07cf31efb7330b568",
-        "signature": "bc9c8663d5243abcd211c5edb807b2b259110202877ab9cd2ac7f0564dfcd69b",
+        "version": "557d19105aba14c20b4680d6db71bcb952e27cce5fcd5f43a69f7e048cf02773",
+        "signature": "3078c73bcc63f4f66eb30a7982fd6c0bf91af8565919f7564a24daff1495d6f6",
         "affectsGlobalScope": false
       },
       "../package.json": {
@@ -382,7 +387,7 @@
         "affectsGlobalScope": false
       },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "ce930417637c5d00fa39e54936d74dd849e3d32b1b5d8811a9a4b58c7bc197b9",
+        "version": "ee9922392096546834e3490b100e62f1812acdbfe590c3fc92ccd7ffd9b2ca66",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -948,7 +953,8 @@
         "../node_modules/@types/node/worker_threads.d.ts",
         "../node_modules/tslib/tslib.d.ts",
         "../node_modules/yaml/index.d.ts",
-        "../stagen/IPacket.ts"
+        "../stagen/IPacket.ts",
+        "../stagen/WorkerState.ts"
       ],
       "../stagen/Stagen.ts": [
         "../node_modules/@types/node/fs.d.ts",
@@ -956,7 +962,11 @@
         "../node_modules/@types/node/path.d.ts",
         "../node_modules/@types/node/worker_threads.d.ts",
         "../node_modules/tslib/tslib.d.ts",
-        "../stagen/IPacket.ts"
+        "../stagen/IPacket.ts",
+        "../stagen/WorkerState.ts"
+      ],
+      "../stagen/WorkerState.ts": [
+        "../node_modules/tslib/tslib.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -1359,7 +1369,8 @@
       "../src/cli.ts",
       "../stagen/IPacket.ts",
       "../stagen/MarkdownProcessor.ts",
-      "../stagen/Stagen.ts"
+      "../stagen/Stagen.ts",
+      "../stagen/WorkerState.ts"
     ]
   },
   "version": "4.1.3"

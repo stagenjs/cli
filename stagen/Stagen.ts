@@ -2,29 +2,48 @@
 import * as FileSystem from 'fs';
 import * as Path from 'path';
 import * as OS from 'os';
-import * as WorkerTheads from 'worker_threads';
+import * as WorkerThreads from 'worker_threads';
 import {IPacket} from './IPacket';
+import {WorkerState} from './WorkerState';
+
+enum ProcessingState {
+    METADATA,
+    MARKDOWN
+}
 
 export class Stagen {
     private _rootDir: string;
     private _outputDir: string;
-    private _pages: Array<string>;
+    private _metadataQueue: Array<string>;
+    private _processingQueue: Array<string>;
     private _templateFile: string;
+    private _workerExitPromises: Array<Promise<void>>;
+    private _metadata: Record<any, any>;
+    private _contents: Record<string, string>;
+    private _state: ProcessingState;
+    private _workers: Array<WorkerThreads.Worker>;
+    private _workerStates: Record<number, WorkerState>;
 
     public constructor(templateFile: string, rootDir: string, outputDir: string) {
         this._templateFile = templateFile;
         this._rootDir = rootDir;
         this._outputDir = outputDir;
-
-        console.log(this._rootDir, this._outputDir);
-
-        this._pages = null;
+        this._workerExitPromises = [];
+        this._metadataQueue = null;
+        this._processingQueue = null;
+        this._metadata = {};
+        this._contents = {};
+        this._state = ProcessingState.METADATA;
+        this._workerStates = {};
     }
 
     public async execute(): Promise<void> {
-        this._pages = this._scanForPages(this._rootDir);
+        this._metadataQueue = this._scanForPages(this._rootDir);
+        this._processingQueue = [];
 
-        await this._processPages();
+        this._workers = this._initWorkers();
+
+        await Promise.all(this._workerExitPromises);
     }
 
     private _getWorkerCount(): number {
@@ -33,21 +52,21 @@ export class Stagen {
         return Infinity;
     }
 
-    private async _processPages(): Promise<void> {
-        let cpus: number = Math.min(this._pages.length, OS.cpus().length, this._getWorkerCount());
-        let workerThreads: Record<number, WorkerTheads.Worker> = {};
-
-        let promises: Array<Promise<void>> = [];
+    private _initWorkers(): Array<WorkerThreads.Worker> {
+        let cpus: number = Math.min(this._metadataQueue.length, OS.cpus().length, this._getWorkerCount());
+        let workers: Array<WorkerThreads.Worker> = [];
 
         for (let i: number = 0; i < cpus; i++) {
-            workerThreads[i] = this._createWorker();
-            promises.push(this._createExitPromise(workerThreads[i]));
+            let worker: WorkerThreads.Worker = this._createWorker();
+            this._workerStates[worker.threadId] = WorkerState.INITIALIZING;
+            this._workerExitPromises.push(this._createExitPromise(worker));
+            workers.push(worker);
         }
 
-        await Promise.all(promises);
+        return workers;
     }
 
-    private _createExitPromise(worker: WorkerTheads.Worker): Promise<void> {
+    private _createExitPromise(worker: WorkerThreads.Worker): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             worker.once('exit', (exitCode: number) => {
                 if (exitCode !== 0) {
@@ -60,8 +79,8 @@ export class Stagen {
         });
     }
 
-    private _createWorker(): WorkerTheads.Worker {
-        let worker: WorkerTheads.Worker = new WorkerTheads.Worker(Path.resolve(__dirname, './MarkdownProcessor.js'), {
+    private _createWorker(): WorkerThreads.Worker {
+        let worker: WorkerThreads.Worker = new WorkerThreads.Worker(Path.resolve(__dirname, './MarkdownProcessor.js'), {
             workerData: {
                 rootDir: this._rootDir,
                 templateFile: this._templateFile,
@@ -70,29 +89,146 @@ export class Stagen {
         });
         worker.on('message', (packet: IPacket) => {
             switch (packet.code) {
-                case 'state':
-                    if (packet.data === 'idle') {
+                case 'state-update':
+                    this._workerStates[worker.threadId] = packet.data;
+                    if (packet.data === WorkerState.IDLE) {
                         this._onWorkerIdle(worker);
                     }
+                    break;
+                case 'metadata-response':
+                    this._onMetadataResponse(packet.data);
                     break;
             }
         });
         return worker;
     }
 
-    private _onWorkerIdle(worker: WorkerTheads.Worker): void {
-        console.log('ON IDLE');
-        if (this._pages.length > 0) {
-            let page: string = this._pages.pop();
-            worker.postMessage({
-                code: 'process',
-                data: page
-            });
+    private _onMetadataResponse(data: any): void {
+        let page: string = data.page;
+        let contents: string = data.contents;
+        let metadata: any = data.metadata;
+
+        let parsedPath: string = this._parsePath(page);
+
+        let metadataObj: Record<any, any> = this._getMetadataObj(parsedPath);
+
+        for (let i in metadata) {
+            metadataObj[i] = metadata[i];
+        }
+
+        this._contents[page] = contents;
+
+        this._processingQueue.push(page);
+    }
+
+    private _getMetadataObj(path: string): Record<any, any> {
+        let parts: Array<string> = path.split('.');
+
+        let visitor: Record<any, any> = this._metadata;
+
+        for (let i = 0; i < parts.length; i++) {
+            let p: string = parts[i];
+            if (!visitor[p]) {
+                visitor[p] = {};
+            }
+
+            visitor = visitor[p];
+        }
+
+        return visitor;
+    }
+
+    private _normalizePath(path: string): string {
+        return path.replace(this._rootDir, '');
+    }
+
+    private _parsePath(path: string): string {
+        let parts: Path.ParsedPath = Path.parse(this._normalizePath(path));
+
+        let dir: string = '';
+        let obj: string = parts.name;
+
+        if (parts.dir !== '/') {
+            dir = parts.dir.slice(1).replace('/', '.');
+        }
+
+        let parsedPath: string = dir;
+
+        if (parsedPath) {
+            parsedPath += '.' + obj;
         }
         else {
-            worker.postMessage({
-                code: 'exit'
-            });
+            parsedPath = obj;
+        }
+
+        return parsedPath;
+    }
+
+    private _startMarkdownProcessing(): void {
+        // First check to ensure that all workers are finished processing.
+
+        let isAllIdling: boolean = true;
+        for (let i in this._workerStates) {
+            if (this._workerStates[i] !== WorkerState.IDLE) {
+                isAllIdling = false;
+                break;
+            }
+        }
+
+        if (!isAllIdling) {
+            // Then wait some more
+            setTimeout(() => {
+                this._startMarkdownProcessing();
+            }, 1000);
+            return;
+        }
+
+        for (let i: number = 0; i < this._workers.length; i++) {
+            this._onWorkerIdle(this._workers[i]);
+        }
+    }
+
+    private _processPage(worker: WorkerThreads.Worker, page: string): void {
+        let parsed: string = this._parsePath(page);
+        let context: Record<any, any> = this._getMetadataObj(parsed);
+        worker.postMessage({
+            code: 'process-markdown',
+            data: {
+                page: page,
+                context: context,
+                metadata: this._metadata,
+                markdown: this._contents[page]
+            }
+        });
+    }
+
+    private _onWorkerIdle(worker: WorkerThreads.Worker): void {
+        switch (this._state) {
+            case ProcessingState.METADATA:
+                if (this._metadataQueue.length > 0) {
+                    let page: string = this._metadataQueue.pop();
+                    worker.postMessage({
+                        code: 'process-metadata',
+                        data: page
+                    });
+                }
+                else {
+                    this._state = ProcessingState.MARKDOWN;
+                    process.nextTick(() => {
+                        this._startMarkdownProcessing();
+                    });
+                }
+                break;
+            case ProcessingState.MARKDOWN:
+                if (this._processingQueue.length > 0) {
+                    this._processPage(worker, this._processingQueue.pop());
+                }
+                else {
+                    worker.postMessage({
+                        code: 'exit'
+                    });
+                }
+                break;
         }
     }
     
