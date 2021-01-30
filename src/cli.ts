@@ -13,6 +13,7 @@ program.option('-t <templateFile>', 'A template EJS. Defaults to ./template/inde
 program.option('-a <assetsDirectory>', 'The assets directory. Defaults to ./template/assets');
 program.option('-o <directory>', 'Output directory. Defaults to ./public');
 program.option('-c <configFile>', 'Path to config file. Defaults to ./stagen.yml');
+program.option('-s <styleEntryFile>', 'Path to the entry Sass file. Defaults to ./template/style/index.scss');
 
 program.parse(process.argv);
 
@@ -57,7 +58,15 @@ program.parse(process.argv);
         assetsDir = Path.resolve(process.cwd(), './template/assets');
     }
 
-    let stagen: Stagen = new Stagen(templateFile, entryPath, outputDir, configFile, assetsDir);
+    let styleEntry: string = null;
+    if (program.s) {
+        styleEntry = Path.resolve(process.cwd(), program.s);
+    }
+    else {
+        styleEntry = Path.resolve(process.cwd(), './template/style/index.scss');
+    }
+
+    let stagen: Stagen = new Stagen(templateFile, entryPath, outputDir, configFile, assetsDir, styleEntry);
 
     await stagen.execute();
 })();

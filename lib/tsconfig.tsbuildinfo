@@ -501,18 +501,23 @@
         "signature": "2752e1ab9e145dd1132d1e45d29b9d14aff9c46959f502ef77ea83e6c3d54e49",
         "affectsGlobalScope": false
       },
+      "../node_modules/@types/sass/index.d.ts": {
+        "version": "b1071c8eeb8da55bfac2666551ac923320b0c8a76a292ff55de0190ea59e691c",
+        "signature": "b1071c8eeb8da55bfac2666551ac923320b0c8a76a292ff55de0190ea59e691c",
+        "affectsGlobalScope": false
+      },
       "../stagen/Stagen.ts": {
-        "version": "25d482d9f0b78bc118fb25fae77cbac9c96a371f0b4054d134aea98a62a79eb7",
-        "signature": "9548cb9e342807e2a6f91c5ff79da92b54ba809806ebb69192b16c14cf749c6a",
+        "version": "1393bceaee207db1e4bbeba84d25709e620c7f994b229ed5efb31074cf570002",
+        "signature": "22a2158e361462b6a984ecb00440089e56f6292f3b2e21d2a85f9e01b3372bc1",
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "032de02b6e610e62f71850fa6db1a13136089db800dd8714f66c5d28c3804339",
-        "signature": "d53071b5c3c4a6b321a6d7c6352aacf2b78d094685ed9ef7a0edc511ec4e4d62",
+        "version": "5dafae271abfee3e2eb9a20fa3a0169d68bc383d518988ae9932d2ce8ba47c16",
+        "signature": "f9b9f340e01883436576ae0fcf16e530325eebfacf6b52d9bf1138e505f8f566",
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "71ced398d768db2c4c03bc0a7cbc05274e4a2325d8deaf87d300c35b5eba7b1f",
+        "version": "b23ad9b6279ec665d0f58f8e462fae29e42c6bf498cb01b3ecfbcd331a3dd674",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -926,6 +931,9 @@
       "../node_modules/@types/node/zlib.d.ts": [
         "../node_modules/@types/node/stream.d.ts"
       ],
+      "../node_modules/@types/sass/index.d.ts": [
+        "../node_modules/@types/node/index.d.ts"
+      ],
       "../node_modules/yaml/index.d.ts": [
         "../node_modules/yaml/parse-cst.d.ts",
         "../node_modules/yaml/types.d.ts",
@@ -971,6 +979,7 @@
         "../node_modules/@types/node/os.d.ts",
         "../node_modules/@types/node/path.d.ts",
         "../node_modules/@types/node/worker_threads.d.ts",
+        "../node_modules/@types/sass/index.d.ts",
         "../node_modules/tslib/tslib.d.ts",
         "../node_modules/yaml/index.d.ts",
         "../stagen/IPacket.ts",
@@ -1237,6 +1246,9 @@
       "../node_modules/@types/node/zlib.d.ts": [
         "../node_modules/@types/node/stream.d.ts"
       ],
+      "../node_modules/@types/sass/index.d.ts": [
+        "../node_modules/@types/node/index.d.ts"
+      ],
       "../node_modules/yaml/index.d.ts": [
         "../node_modules/yaml/parse-cst.d.ts",
         "../node_modules/yaml/types.d.ts",
@@ -1332,6 +1344,7 @@
       "../node_modules/@types/node/wasi.d.ts",
       "../node_modules/@types/node/worker_threads.d.ts",
       "../node_modules/@types/node/zlib.d.ts",
+      "../node_modules/@types/sass/index.d.ts",
       "../node_modules/commander/typings/index.d.ts",
       "../node_modules/tslib/tslib.d.ts",
       "../node_modules/typescript/lib/lib.dom.d.ts",

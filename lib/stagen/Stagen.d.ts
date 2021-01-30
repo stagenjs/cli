@@ -15,7 +15,8 @@ export declare class Stagen {
     private _configFile;
     private _config;
     private _assetsDir;
-    constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string);
+    private _styleEntry;
+    constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string, styleEntry: string);
     private _setProgressTotal;
     private _updateProgress;
     private _incrementProgress;

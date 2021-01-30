@@ -7,6 +7,7 @@ import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
 import {Bar, Presets} from 'cli-progress';
 import * as YAML from 'yaml';
+import * as Sass from 'sass';
 
 enum ProcessingState {
     METADATA,
@@ -43,13 +44,15 @@ export class Stagen {
     private _configFile: string;
     private _config: Record<any, any>;
     private _assetsDir: string;
+    private _styleEntry: string;
 
-    public constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string) {
+    public constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string, styleEntry: string) {
         this._templateFile = templateFile;
         this._configFile = configFile;
         this._rootDir = rootDir;
         this._outputDir = outputDir;
         this._assetsDir = assetsDir;
+        this._styleEntry = styleEntry;
         this._workerExitPromises = [];
         this._metadataQueue = null;
         this._processingQueue = null;
@@ -69,12 +72,6 @@ export class Stagen {
             encoding: 'utf8'
         }));
     }
-
-    // private _setProgressText(text: string): void {
-    //     this._progress.update(this._progressValue, {
-    //         text: text
-    //     });
-    // }
 
     private _setProgressTotal(value: number): void {
         this._progress.setTotal(value);
@@ -109,6 +106,12 @@ export class Stagen {
         await Promise.all(this._workerExitPromises);
 
         FileSystem.copySync(this._assetsDir, Path.resolve(this._outputDir, 'assets'));
+
+        let styleResult: Sass.Result = Sass.renderSync({
+            file: this._styleEntry,
+            outFile: Path.resolve(this._outputDir, 'assets/style.css')
+        });
+        FileSystem.writeFileSync(Path.resolve(this._outputDir, 'assets/style.css'), styleResult.css);
 
         this._progress.stop();
     }
