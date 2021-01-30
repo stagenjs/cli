@@ -87,7 +87,9 @@ export class Stagen {
     }
 
     public async execute(): Promise<void> {
-        this._updateProgress(0, 'Scanning...', 1);
+        this._progress.start(1, 0, {
+            text: 'Scanning...'
+        });
         this._metadataQueue = this._scanForPages(this._rootDir);
         this._processingQueue = [];
 
