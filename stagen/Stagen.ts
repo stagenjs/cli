@@ -1,8 +1,4 @@
 
-import {TemplateProvider} from './TemplateProvider';
-import {DefaultTemplateProvider} from './DefaultTemplateProvider';
-import {EJSTemplateEngine} from './EJSTemplateEngine';
-import {TemplateEngine} from './TemplateEngine';
 import * as FileSystem from 'fs';
 import * as Path from 'path';
 import * as OS from 'os';
@@ -13,32 +9,20 @@ export class Stagen {
     private _rootDir: string;
     private _outputDir: string;
     private _pages: Array<string>;
-    private _engine: TemplateEngine;
-    private _template: string;
+    private _templateFile: string;
 
-    public constructor(rootDir: string, outputDir: string) {
+    public constructor(templateFile: string, rootDir: string, outputDir: string) {
+        this._templateFile = templateFile;
         this._rootDir = rootDir;
         this._outputDir = outputDir;
 
         console.log(this._rootDir, this._outputDir);
 
         this._pages = null;
-        this._engine = this._createTemplateEngine();
-    }
-
-    protected _createTemplateProvider(): TemplateProvider {
-        return new DefaultTemplateProvider();
-    }
-
-    protected _createTemplateEngine(): TemplateEngine {
-        return new EJSTemplateEngine();
     }
 
     public async execute(): Promise<void> {
         this._pages = this._scanForPages(this._rootDir);
-
-        let templateProvider: TemplateProvider = this._createTemplateProvider();
-        this._template = await templateProvider.load();
 
         await this._processPages();
     }
@@ -78,7 +62,11 @@ export class Stagen {
 
     private _createWorker(): WorkerTheads.Worker {
         let worker: WorkerTheads.Worker = new WorkerTheads.Worker(Path.resolve(__dirname, './MarkdownProcessor.js'), {
-            workerData: {}
+            workerData: {
+                rootDir: this._rootDir,
+                templateFile: this._templateFile,
+                outputDir: this._outputDir
+            }
         });
         worker.on('message', (packet: IPacket) => {
             switch (packet.code) {
@@ -87,23 +75,9 @@ export class Stagen {
                         this._onWorkerIdle(worker);
                     }
                     break;
-                case 'processed':
-                    this._onWorkerProcessed(packet.data);
             }
         });
         return worker;
-    }
-
-    private async _onWorkerProcessed(data: any): Promise<void> {
-        console.log('MD CONTENT', data);
-        let output: string = await this._engine.execute(this._template, data.content);
-        let outputDir: string = data.page.replace(this._rootDir, this._outputDir).replace(/\.md$/, '.html');
-        let dirName: string = Path.dirname(outputDir);
-        FileSystem.mkdirSync(dirName, {
-            recursive: true
-        });
-        FileSystem.writeFileSync(outputDir, output);
-        // console.log('OUTPUT', output);
     }
 
     private _onWorkerIdle(worker: WorkerTheads.Worker): void {
@@ -121,15 +95,7 @@ export class Stagen {
             });
         }
     }
-
-    // private _isTSEnvironment(): boolean {
-    //     return /\.ts$/.test(__filename);
-    // }
-
-    // private async _processPage(): Promise<void> {
-
-    // }
-
+    
     private _scanForPages(dir: string): Array<string> {
         let fstat = FileSystem.statSync(dir);
         let output: Array<string> = [];
@@ -141,7 +107,6 @@ export class Stagen {
         }
         else if (fstat.isFile() && Path.parse(dir).ext === '.md') {
             output.push(dir);
-            // processFile(dir);
         }
 
         return output;

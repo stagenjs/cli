@@ -1,2 +1,0 @@
-
-export {Stagen} from './Stagen';
