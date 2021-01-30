@@ -22,7 +22,6 @@
   "dependencies": {
     "cli-progress": "^3.8.2",
     "commander": "^6.2.1",
-    "ejs": "^3.1.5",
     "markdown-it": "^12.0.4",
     "tslib": "^2.1.0",
     "yaml": "^1.10.0"
