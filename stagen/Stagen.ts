@@ -5,10 +5,24 @@ import * as OS from 'os';
 import * as WorkerThreads from 'worker_threads';
 import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
+import {Bar, Presets} from 'cli-progress';
 
 enum ProcessingState {
     METADATA,
     MARKDOWN
+}
+
+interface IMetadataItem extends Record<string, any> {
+    $type: "directory" | "file"
+}
+
+interface IMetadataFile extends IMetadataItem {
+    $uri: string;
+}
+
+interface IMetadata {
+    mapping: Record<string, IMetadataItem>;
+    files: Array<IMetadataFile>;
 }
 
 export class Stagen {
@@ -18,11 +32,13 @@ export class Stagen {
     private _processingQueue: Array<string>;
     private _templateFile: string;
     private _workerExitPromises: Array<Promise<void>>;
-    private _metadata: Record<any, any>;
+    private _metadata: IMetadata;
     private _contents: Record<string, string>;
     private _state: ProcessingState;
     private _workers: Array<WorkerThreads.Worker>;
     private _workerStates: Record<number, WorkerState>;
+    private _progress: Bar;
+    private _progressValue: number;
 
     public constructor(templateFile: string, rootDir: string, outputDir: string) {
         this._templateFile = templateFile;
@@ -31,19 +47,56 @@ export class Stagen {
         this._workerExitPromises = [];
         this._metadataQueue = null;
         this._processingQueue = null;
-        this._metadata = {};
+        this._metadata = {
+            mapping: {},
+            files: []
+        };
         this._contents = {};
         this._state = ProcessingState.METADATA;
         this._workerStates = {};
+        this._progressValue = 0;
+        this._progress = new Bar({
+            format: '[{bar}] {value}/{total}    {text}',
+        }, Presets.shades_classic);
+    }
+
+    // private _setProgressText(text: string): void {
+    //     this._progress.update(this._progressValue, {
+    //         text: text
+    //     });
+    // }
+
+    private _setProgressTotal(value: number): void {
+        this._progress.setTotal(value);
+    }
+
+    private _updateProgress(value: number, text: string, newTotal?: number): void {
+        if (newTotal !== undefined) {
+            this._setProgressTotal(newTotal);
+        }
+        this._progressValue = value;
+        this._progress.update(value, {
+            text: text
+        });
+    }
+
+    private _incrementProgress(text: string): void {
+        this._progress.update(++this._progressValue, {
+            text: text
+        });
     }
 
     public async execute(): Promise<void> {
+        this._updateProgress(0, 'Scanning...', 1);
         this._metadataQueue = this._scanForPages(this._rootDir);
         this._processingQueue = [];
 
+        this._updateProgress(0, 'Initializing workers...', (this._metadataQueue.length * 2) + 1);
         this._workers = this._initWorkers();
 
         await Promise.all(this._workerExitPromises);
+        
+        this._progress.stop();
     }
 
     private _getWorkerCount(): number {
@@ -103,6 +156,10 @@ export class Stagen {
         return worker;
     }
 
+    private _convertToHTMLPath(path: string): string {
+        return path.replace(this._rootDir, '').replace(/\.md$/, '.html');
+    }
+
     private _onMetadataResponse(data: any): void {
         let page: string = data.page;
         let contents: string = data.contents;
@@ -110,7 +167,10 @@ export class Stagen {
 
         let parsedPath: string = this._parsePath(page);
 
-        let metadataObj: Record<any, any> = this._getMetadataObj(parsedPath);
+        let metadataObj: Partial<IMetadataFile> = this._getMetadataObj(parsedPath);
+        metadataObj.$type = 'file';
+        
+        metadata.$uri = this._convertToHTMLPath(page);
 
         for (let i in metadata) {
             metadataObj[i] = metadata[i];
@@ -121,21 +181,23 @@ export class Stagen {
         this._processingQueue.push(page);
     }
 
-    private _getMetadataObj(path: string): Record<any, any> {
+    private _getMetadataObj(path: string): IMetadataItem {
         let parts: Array<string> = path.split('.');
 
-        let visitor: Record<any, any> = this._metadata;
+        let visitor: Record<any, any> = this._metadata.mapping;
 
         for (let i = 0; i < parts.length; i++) {
             let p: string = parts[i];
             if (!visitor[p]) {
-                visitor[p] = {};
+                visitor[p] = {
+                    $type: 'directory'
+                };
             }
 
             visitor = visitor[p];
         }
 
-        return visitor;
+        return <IMetadataItem>visitor;
     }
 
     private _normalizePath(path: string): string {
@@ -183,8 +245,30 @@ export class Stagen {
             return;
         }
 
+        this._processMetadata();
+
+        this._state = ProcessingState.MARKDOWN;
+
         for (let i: number = 0; i < this._workers.length; i++) {
             this._onWorkerIdle(this._workers[i]);
+        }
+    }
+
+    private _processMetadata(): void {
+        this._incrementProgress('Processing metadata...');
+        for (let i in this._metadata.mapping) {
+            this._processMetadataItem(this._metadata, this._metadata.mapping[i]);
+        }
+    }
+
+    private _processMetadataItem(root: IMetadata, item: IMetadataItem): void {
+        if (item.$type === "directory") {
+            for (let i in item) {
+                this._processMetadataItem(root, item[i]);
+            }
+        }
+        else {
+            root.files.push(<IMetadataFile>item);
         }
     }
 
@@ -206,6 +290,7 @@ export class Stagen {
         switch (this._state) {
             case ProcessingState.METADATA:
                 if (this._metadataQueue.length > 0) {
+                    this._incrementProgress('Processing metadata...');
                     let page: string = this._metadataQueue.pop();
                     worker.postMessage({
                         code: 'process-metadata',
@@ -213,7 +298,6 @@ export class Stagen {
                     });
                 }
                 else {
-                    this._state = ProcessingState.MARKDOWN;
                     process.nextTick(() => {
                         this._startMarkdownProcessing();
                     });
@@ -221,6 +305,7 @@ export class Stagen {
                 break;
             case ProcessingState.MARKDOWN:
                 if (this._processingQueue.length > 0) {
+                    this._incrementProgress('Processing markdown...');
                     this._processPage(worker, this._processingQueue.pop());
                 }
                 else {
