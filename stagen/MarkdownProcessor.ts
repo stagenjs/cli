@@ -4,17 +4,14 @@ import {
     workerData
 } from 'worker_threads'
 import * as FileSystem from 'fs';
-import * as MarkdownIt from 'markdown-it';
 import * as YAML from 'yaml';
 import * as Path from 'path';
 import * as EJS from 'ejs';
 import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
+import * as Showdown from 'showdown';
 
-let md: MarkdownIt = MarkdownIt({
-    html: true,
-    typographer: true
-});
+let mdConverter: Showdown.Converter = new Showdown.Converter();
 
 let currentState: WorkerState = WorkerState.IDLE;
 
@@ -26,6 +23,10 @@ let setState = (state: WorkerState): void => {
     });
 }
 
+let renderMarkdown = (content: string): string => {
+    return mdConverter.makeHtml(content);
+}
+
 let processFile = async (data: Record<any, any>): Promise<void> => {
     setState(WorkerState.PROCESSING);
 
@@ -34,11 +35,11 @@ let processFile = async (data: Record<any, any>): Promise<void> => {
     let metadata: Record<any, any> = data.metadata;
 
     let output: string = await EJS.renderFile(workerData.templateFile, {
-        content: await EJS.render(md.render(data.markdown), {
+        content: renderMarkdown(await EJS.render(data.markdown, {
             context,
             metadata,
             config: workerData.config    
-        }),
+        })),
         context,
         metadata,
         config: workerData.config

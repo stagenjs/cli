@@ -298,7 +298,6 @@ export class Stagen {
         else {
             root.files.push(<IMetadataFile>item);
             if (item.type === 'article') {
-                // console.log('PUSHING ARTICLES', item, p);
                 root.articles.push(<IMetadataFile>item);
             }
         }
