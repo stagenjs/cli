@@ -12,7 +12,10 @@ import * as EJS from 'ejs';
 import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
 
-let md: MarkdownIt = MarkdownIt();
+let md: MarkdownIt = MarkdownIt({
+    html: true,
+    typographer: true
+});
 
 let currentState: WorkerState = WorkerState.IDLE;
 
@@ -32,7 +35,11 @@ let processFile = async (data: Record<any, any>): Promise<void> => {
     let metadata: Record<any, any> = data.metadata;
 
     let output: string = await EJS.renderFile(workerData.templateFile, {
-        content: md.render(data.markdown),
+        content: await EJS.render(md.render(data.markdown), {
+            context,
+            metadata,
+            config: workerData.config    
+        }),
         context,
         metadata,
         config: workerData.config
