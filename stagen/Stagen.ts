@@ -30,6 +30,7 @@ interface IMetadata {
 
 export class Stagen {
     private _rootDir: string;
+    private _srcDir: string;
     private _outputDir: string;
     private _metadataQueue: Array<string>;
     private _processingQueue: Array<string>;
@@ -47,13 +48,16 @@ export class Stagen {
     private _assetsDir: string;
     private _styleEntry: string;
 
-    public constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string, styleEntry: string) {
-        this._templateFile = templateFile;
-        this._configFile = configFile;
+    public constructor(rootDir: string, outputDir: string) {
         this._rootDir = rootDir;
+
+        this._srcDir = Path.resolve(this._rootDir, 'src');
+        this._templateFile = Path.resolve(this._rootDir, 'template/index.ejs');
+        this._configFile = Path.resolve(this._rootDir, 'stagen.yml');
+        this._assetsDir = Path.resolve(this._rootDir, 'template/assets');
+        this._styleEntry = Path.resolve(this._rootDir, 'template/style/index.scss');
         this._outputDir = outputDir;
-        this._assetsDir = assetsDir;
-        this._styleEntry = styleEntry;
+
         this._workerExitPromises = [];
         this._metadataQueue = null;
         this._processingQueue = null;
@@ -99,7 +103,7 @@ export class Stagen {
         this._progress.start(1, 0, {
             text: 'Scanning...'
         });
-        this._metadataQueue = this._scanForPages(this._rootDir);
+        this._metadataQueue = this._scanForPages(this._srcDir);
         this._processingQueue = [];
 
         this._updateProgress(0, 'Initializing workers...', (this._metadataQueue.length * 2) + 1);
@@ -155,6 +159,7 @@ export class Stagen {
         let worker: WorkerThreads.Worker = new WorkerThreads.Worker(Path.resolve(__dirname, './MarkdownProcessor.js'), {
             workerData: {
                 rootDir: this._rootDir,
+                srcDir: this._srcDir,
                 templateFile: this._templateFile,
                 outputDir: this._outputDir,
                 config: this._config
@@ -177,7 +182,7 @@ export class Stagen {
     }
 
     private _convertToHTMLPath(path: string): string {
-        return path.replace(this._rootDir, '').replace(/\.md$/, '.html');
+        return path.replace(this._srcDir, '').replace(/\.md$/, '.html');
     }
 
     private _onMetadataResponse(data: any): void {
@@ -221,7 +226,7 @@ export class Stagen {
     }
 
     private _normalizePath(path: string): string {
-        return path.replace(this._rootDir, '');
+        return path.replace(this._srcDir, '');
     }
 
     private _parsePath(path: string): string {

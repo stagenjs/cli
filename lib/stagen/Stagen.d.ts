@@ -1,5 +1,6 @@
 export declare class Stagen {
     private _rootDir;
+    private _srcDir;
     private _outputDir;
     private _metadataQueue;
     private _processingQueue;
@@ -16,7 +17,7 @@ export declare class Stagen {
     private _config;
     private _assetsDir;
     private _styleEntry;
-    constructor(templateFile: string, rootDir: string, outputDir: string, configFile: string, assetsDir: string, styleEntry: string);
+    constructor(rootDir: string, outputDir: string);
     private _setProgressTotal;
     private _updateProgress;
     private _incrementProgress;

@@ -10,10 +10,14 @@ import * as EJS from 'ejs';
 import {IPacket} from './IPacket';
 import {WorkerState} from './WorkerState';
 import * as Showdown from 'showdown';
+import {TemplateAPI} from './TemplateAPI';
+import { ITemplateAPI } from './ITemplateAPI';
 
 let mdConverter: Showdown.Converter = new Showdown.Converter();
 
 let currentState: WorkerState = WorkerState.IDLE;
+
+let tapi: ITemplateAPI = new TemplateAPI(workerData.rootDir);
 
 let setState = (state: WorkerState): void => {
     currentState = state;
@@ -38,14 +42,16 @@ let processFile = async (data: Record<any, any>): Promise<void> => {
         content: renderMarkdown(await EJS.render(data.markdown, {
             context,
             metadata,
-            config: workerData.config    
+            config: workerData.config,
+            stagen: tapi 
         })),
         context,
         metadata,
-        config: workerData.config
+        config: workerData.config,
+        stagen: tapi
     });
 
-    let outputFile: string = page.replace(workerData.rootDir, workerData.outputDir).replace(/\.md$/, '.html');
+    let outputFile: string = page.replace(workerData.srcDir, workerData.outputDir).replace(/\.md$/, '.html');
     let dirName: string = Path.dirname(outputFile);
     FileSystem.mkdirSync(dirName, {
         recursive: true
@@ -57,7 +63,7 @@ let processFile = async (data: Record<any, any>): Promise<void> => {
 }
 
 let parseMetadata = (contents: string): Record<any, any> => {
-    let metadata = {};
+    let metadata: Record<any, any> = {};
     if (contents.slice(0, 4) === '---\n') {
         contents = contents.slice(4);
         let header = contents.slice(0, contents.indexOf('---\n'));
@@ -65,6 +71,11 @@ let parseMetadata = (contents: string): Record<any, any> => {
         contents = contents.slice(contents.indexOf('\n') + 1);
 
         metadata = YAML.parse(header);
+    }
+
+    if (metadata.date) {
+        let parts = metadata.date.split('/');
+        metadata.date = new Date(parts[0], parts[1], parts[2]);
     }
 
     return {

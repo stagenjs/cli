@@ -507,8 +507,8 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "a9e8eab03a4b2a60cdae0e921d34553c7fd28f231d72b850a9fde86254bcfc32",
-        "signature": "22a2158e361462b6a984ecb00440089e56f6292f3b2e21d2a85f9e01b3372bc1",
+        "version": "803a5bbd9c4a6e9b087e82b80c0f036e0ac3b541c98af0a1de0b94f7581f63ea",
+        "signature": "1618046fba6ef17d94f88e0c244b6927745f11f6adc86891b50a736e84df7039",
         "affectsGlobalScope": false
       },
       "../package.json": {
@@ -517,8 +517,13 @@
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "b23ad9b6279ec665d0f58f8e462fae29e42c6bf498cb01b3ecfbcd331a3dd674",
+        "version": "395744b68b7ed60f8bb394d2c55ce6a49d89598ea61d40316de641a221123122",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
+      "../stagen/ITemplateAPI.ts": {
+        "version": "aac173a9c5721f3be0e923f33c5093c95167976e4cf7d7bd0ebc33a74cf290be",
+        "signature": "1f4b62d2fb5d7a755400de47703a35aa86684a8ebdc0967d6f0916e18f7ce0e6",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/ejs/index.d.ts": {
@@ -531,8 +536,13 @@
         "signature": "2f5663a907b70a487ca1541607b72fb58a627d78d1a3b94ec6df15fa9a4266b3",
         "affectsGlobalScope": false
       },
+      "../stagen/TemplateAPI.ts": {
+        "version": "9b417b14788c470711b4d3551370830aee1564d50bb12b21dab0c4769e306819",
+        "signature": "9b2131d51ddf32130c360b0ee22d21e8709a863376cf9070611ff4b621a11f16",
+        "affectsGlobalScope": false
+      },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "710adae4f6cb50e60c205d40238c64f4b734b73029a8ac297c14a52614172eab",
+        "version": "1a8bead4d766cc3f77078f736e1073072687e4434543ebdf23e81cbb2be29183",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -773,6 +783,9 @@
       "../stagen/IPacket.ts": [
         "../node_modules/tslib/tslib.d.ts"
       ],
+      "../stagen/ITemplateAPI.ts": [
+        "../node_modules/tslib/tslib.d.ts"
+      ],
       "../stagen/MarkdownProcessor.ts": [
         "../node_modules/@types/ejs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -782,6 +795,8 @@
         "../node_modules/tslib/tslib.d.ts",
         "../node_modules/yaml/index.d.ts",
         "../stagen/IPacket.ts",
+        "../stagen/ITemplateAPI.ts",
+        "../stagen/TemplateAPI.ts",
         "../stagen/WorkerState.ts"
       ],
       "../stagen/Stagen.ts": [
@@ -795,6 +810,11 @@
         "../node_modules/yaml/index.d.ts",
         "../stagen/IPacket.ts",
         "../stagen/WorkerState.ts"
+      ],
+      "../stagen/TemplateAPI.ts": [
+        "../node_modules/@types/node/path.d.ts",
+        "../node_modules/tslib/tslib.d.ts",
+        "../stagen/ITemplateAPI.ts"
       ],
       "../stagen/WorkerState.ts": [
         "../node_modules/tslib/tslib.d.ts"
@@ -998,6 +1018,9 @@
         "../node_modules/yaml/index.d.ts",
         "../node_modules/yaml/parse-cst.d.ts",
         "../node_modules/yaml/types.d.ts"
+      ],
+      "../stagen/TemplateAPI.ts": [
+        "../stagen/ITemplateAPI.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -1107,8 +1130,10 @@
       "../package.json",
       "../src/cli.ts",
       "../stagen/IPacket.ts",
+      "../stagen/ITemplateAPI.ts",
       "../stagen/MarkdownProcessor.ts",
       "../stagen/Stagen.ts",
+      "../stagen/TemplateAPI.ts",
       "../stagen/WorkerState.ts"
     ]
   },
