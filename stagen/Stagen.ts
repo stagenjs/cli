@@ -25,6 +25,7 @@ interface IMetadataFile extends IMetadataItem {
 interface IMetadata {
     mapping: Record<string, IMetadataItem>;
     files: Array<IMetadataFile>;
+    articles: Array<IMetadataFile>;
 }
 
 export class Stagen {
@@ -58,7 +59,8 @@ export class Stagen {
         this._processingQueue = null;
         this._metadata = {
             mapping: {},
-            files: []
+            files: [],
+            articles: []
         };
         this._contents = {};
         this._state = ProcessingState.METADATA;
@@ -263,6 +265,10 @@ export class Stagen {
             return;
         }
 
+        if (this._state === ProcessingState.MARKDOWN) {
+            return;
+        }
+
         this._processMetadata();
 
         this._state = ProcessingState.MARKDOWN;
@@ -282,11 +288,19 @@ export class Stagen {
     private _processMetadataItem(root: IMetadata, item: IMetadataItem): void {
         if (item.$type === "directory") {
             for (let i in item) {
+                if (/^\$/.test(i)) {
+                    // Skip internal attributes
+                    continue;
+                }
                 this._processMetadataItem(root, item[i]);
             }
         }
         else {
             root.files.push(<IMetadataFile>item);
+            if (item.type === 'article') {
+                // console.log('PUSHING ARTICLES', item, p);
+                root.articles.push(<IMetadataFile>item);
+            }
         }
     }
 

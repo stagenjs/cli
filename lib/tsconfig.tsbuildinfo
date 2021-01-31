@@ -507,7 +507,7 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "1393bceaee207db1e4bbeba84d25709e620c7f994b229ed5efb31074cf570002",
+        "version": "3132b73c44cf081228d23f9f5835ed8b0a785ce4ffb1668618a347203ad38ade",
         "signature": "22a2158e361462b6a984ecb00440089e56f6292f3b2e21d2a85f9e01b3372bc1",
         "affectsGlobalScope": false
       },
@@ -637,7 +637,7 @@
         "affectsGlobalScope": false
       },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "6df054f7e2ccba10f108c7f9b1862d52abc237ea967f9126919834c4dd5b944a",
+        "version": "ceaae1fb8b2d094ea1766527294d800fa252215ba76cbe36181a9e59e490cc3b",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },

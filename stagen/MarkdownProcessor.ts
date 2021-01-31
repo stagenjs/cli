@@ -1,8 +1,7 @@
 
 import {
     parentPort,
-    workerData,
-    threadId
+    workerData
 } from 'worker_threads'
 import * as FileSystem from 'fs';
 import * as MarkdownIt from 'markdown-it';
