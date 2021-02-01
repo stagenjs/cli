@@ -542,7 +542,7 @@
         "affectsGlobalScope": false
       },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "1a8bead4d766cc3f77078f736e1073072687e4434543ebdf23e81cbb2be29183",
+        "version": "02178f5fb66711acd30db3ab2ee9a548594a5a9556b4dc2e61cff63d8ce9be56",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },

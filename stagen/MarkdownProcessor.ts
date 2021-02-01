@@ -13,7 +13,9 @@ import * as Showdown from 'showdown';
 import {TemplateAPI} from './TemplateAPI';
 import { ITemplateAPI } from './ITemplateAPI';
 
-let mdConverter: Showdown.Converter = new Showdown.Converter();
+let mdConverter: Showdown.Converter = new Showdown.Converter({
+    tables: true
+});
 
 let currentState: WorkerState = WorkerState.IDLE;
 
