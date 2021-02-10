@@ -19,7 +19,7 @@ let mdConverter: Showdown.Converter = new Showdown.Converter({
 
 let currentState: WorkerState = WorkerState.IDLE;
 
-let tapi: ITemplateAPI = new TemplateAPI(workerData.rootDir);
+let tapi: ITemplateAPI = new TemplateAPI(workerData.rootDir, workerData.templateRoot);
 
 let setState = (state: WorkerState): void => {
     currentState = state;

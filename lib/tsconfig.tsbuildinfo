@@ -507,8 +507,8 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "803a5bbd9c4a6e9b087e82b80c0f036e0ac3b541c98af0a1de0b94f7581f63ea",
-        "signature": "1618046fba6ef17d94f88e0c244b6927745f11f6adc86891b50a736e84df7039",
+        "version": "71b8c5ae308fdd776c04c10fe74e86adaeaf5b68e345dfa5fea90ace71630768",
+        "signature": "8fed8059bf6183c4833006dd2125c11e0986a0bc156f6120970df3efb3cd3e0d",
         "affectsGlobalScope": false
       },
       "../package.json": {
@@ -526,6 +526,11 @@
         "signature": "1f4b62d2fb5d7a755400de47703a35aa86684a8ebdc0967d6f0916e18f7ce0e6",
         "affectsGlobalScope": false
       },
+      "../stagen/ITemplateProvider.ts": {
+        "version": "f040b02a2e69c91917b23d5ff571b3388ac655337f5569f052d21eaa42cc20dd",
+        "signature": "86141976f93cde605fddd732219854f42503f400894a75397c498e0000aed1b9",
+        "affectsGlobalScope": false
+      },
       "../node_modules/@types/ejs/index.d.ts": {
         "version": "3e1884edd5ad7e5c6f8e900b767dfabc64db4a3588643e72535fa948cddf52cd",
         "signature": "3e1884edd5ad7e5c6f8e900b767dfabc64db4a3588643e72535fa948cddf52cd",
@@ -537,12 +542,12 @@
         "affectsGlobalScope": false
       },
       "../stagen/TemplateAPI.ts": {
-        "version": "9b417b14788c470711b4d3551370830aee1564d50bb12b21dab0c4769e306819",
-        "signature": "9b2131d51ddf32130c360b0ee22d21e8709a863376cf9070611ff4b621a11f16",
+        "version": "c5d354d409d07505d8e6c914f9efc26708a3311619951b94d15ed2618f0f32c0",
+        "signature": "2f49c84e55bf0caa07a15b734b62637408f18c73d5d6032050a9986b5a667806",
         "affectsGlobalScope": false
       },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "02178f5fb66711acd30db3ab2ee9a548594a5a9556b4dc2e61cff63d8ce9be56",
+        "version": "ef3bd2b5e294b5b40602e035b60f6163b90cf72cafae2d36bcc8068053bb6521",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -784,6 +789,9 @@
         "../node_modules/tslib/tslib.d.ts"
       ],
       "../stagen/ITemplateAPI.ts": [
+        "../node_modules/tslib/tslib.d.ts"
+      ],
+      "../stagen/ITemplateProvider.ts": [
         "../node_modules/tslib/tslib.d.ts"
       ],
       "../stagen/MarkdownProcessor.ts": [
@@ -1131,6 +1139,7 @@
       "../src/cli.ts",
       "../stagen/IPacket.ts",
       "../stagen/ITemplateAPI.ts",
+      "../stagen/ITemplateProvider.ts",
       "../stagen/MarkdownProcessor.ts",
       "../stagen/Stagen.ts",
       "../stagen/TemplateAPI.ts",

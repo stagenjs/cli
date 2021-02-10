@@ -34,6 +34,7 @@ export class Stagen {
     private _outputDir: string;
     private _metadataQueue: Array<string>;
     private _processingQueue: Array<string>;
+    private _templateRoot: string;
     private _templateFile: string;
     private _workerExitPromises: Array<Promise<void>>;
     private _metadata: IMetadata;
@@ -47,15 +48,14 @@ export class Stagen {
     private _config: Record<any, any>;
     private _assetsDir: string;
     private _styleEntry: string;
+    private _templateAssets: string;
 
     public constructor(rootDir: string, outputDir: string) {
         this._rootDir = rootDir;
 
         this._srcDir = Path.resolve(this._rootDir, 'src');
-        this._templateFile = Path.resolve(this._rootDir, 'template/index.ejs');
         this._configFile = Path.resolve(this._rootDir, 'stagen.yml');
-        this._assetsDir = Path.resolve(this._rootDir, 'template/assets');
-        this._styleEntry = Path.resolve(this._rootDir, 'template/style/index.scss');
+        this._assetsDir = Path.resolve(this._rootDir, 'assets');
         this._outputDir = outputDir;
 
         this._workerExitPromises = [];
@@ -77,6 +77,40 @@ export class Stagen {
         this._config = YAML.parse(FileSystem.readFileSync(Path.resolve(this._configFile), {
             encoding: 'utf8'
         }));
+
+        if (this._config.template) {
+            let templatePath: string = Path.resolve(this._rootDir, this._config.template);
+            if (FileSystem.existsSync(templatePath)) {
+                this._templateRoot = templatePath;
+            }
+            else {
+                // Do we have a node_modules template?
+                try {
+                    let templateModulePath: string = require.resolve(this._config.template, {
+                        paths: [ Path.resolve(this._rootDir) ]
+                    });
+
+                    if (templateModulePath) {
+                        let templateModule: any = require(templateModulePath);
+                        this._templateRoot = templateModule();
+                    }
+                }
+                catch (ex) {
+                    console.error(ex);
+                }
+            }
+        }
+        else {
+            this._templateRoot = Path.resolve(this._rootDir, 'template');
+        }
+
+        if (!this._templateRoot) {
+            throw new Error('Missing template.');
+        }
+
+        this._templateFile = Path.resolve(this._templateRoot, 'index.ejs');
+        this._templateAssets = Path.resolve(this._templateRoot, 'assets');
+        this._styleEntry = Path.resolve(this._templateRoot, 'style/index.scss');
     }
 
     private _setProgressTotal(value: number): void {
@@ -111,13 +145,14 @@ export class Stagen {
 
         await Promise.all(this._workerExitPromises);
 
+        FileSystem.copySync(this._templateAssets, Path.resolve(this._outputDir, 'tassets'));
         FileSystem.copySync(this._assetsDir, Path.resolve(this._outputDir, 'assets'));
 
         let styleResult: Sass.Result = Sass.renderSync({
             file: this._styleEntry,
-            outFile: Path.resolve(this._outputDir, 'assets/style.css')
+            outFile: Path.resolve(this._outputDir, 'tassets/style.css')
         });
-        FileSystem.writeFileSync(Path.resolve(this._outputDir, 'assets/style.css'), styleResult.css);
+        FileSystem.writeFileSync(Path.resolve(this._outputDir, 'tassets/style.css'), styleResult.css);
 
         this._progress.stop();
     }
@@ -160,6 +195,7 @@ export class Stagen {
             workerData: {
                 rootDir: this._rootDir,
                 srcDir: this._srcDir,
+                templateRoot: this._templateRoot,
                 templateFile: this._templateFile,
                 outputDir: this._outputDir,
                 config: this._config
