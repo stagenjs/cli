@@ -23,6 +23,7 @@ export declare class Stagen {
     private _setProgressTotal;
     private _updateProgress;
     private _incrementProgress;
+    private _endStream;
     execute(): Promise<void>;
     private _getWorkerCount;
     private _initWorkers;

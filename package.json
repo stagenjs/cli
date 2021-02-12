@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/stagenjs/cli#readme",
   "dependencies": {
+    "@breautek/iterator": "^3.0.1",
     "cli-progress": "^3.8.2",
     "commander": "^6.2.1",
     "ejs": "^3.1.5",

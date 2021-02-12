@@ -8,6 +8,7 @@ import {WorkerState} from './WorkerState';
 import {Bar, Presets} from 'cli-progress';
 import * as YAML from 'yaml';
 import * as Sass from 'sass';
+import {promisify} from 'util';
 
 enum ProcessingState {
     METADATA,
@@ -20,12 +21,17 @@ interface IMetadataItem extends Record<string, any> {
 
 interface IMetadataFile extends IMetadataItem {
     $uri: string;
+    sitemap?: boolean;
 }
 
 interface IMetadata {
     mapping: Record<string, IMetadataItem>;
     files: Array<IMetadataFile>;
     articles: Array<IMetadataFile>;
+}
+
+interface IRobotRules {
+    disallow: Array<string>;
 }
 
 export class Stagen {
@@ -133,6 +139,14 @@ export class Stagen {
         });
     }
 
+    private _endStream(stream: FileSystem.WriteStream): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            stream.end(() => {
+                resolve();
+            });
+        });
+    }
+
     public async execute(): Promise<void> {
         this._progress.start(1, 0, {
             text: 'Scanning...'
@@ -140,10 +154,68 @@ export class Stagen {
         this._metadataQueue = this._scanForPages(this._srcDir);
         this._processingQueue = [];
 
+        FileSystem.mkdirSync(this._outputDir, {
+            recursive: true
+        });
+
         this._updateProgress(0, 'Initializing workers...', (this._metadataQueue.length * 2) + 1);
         this._workers = this._initWorkers();
 
+        let robotsStream: FileSystem.WriteStream = FileSystem.createWriteStream(Path.resolve(this._outputDir, 'robots.txt'));
+
+        robotsStream.on('error', (error: Error) => {
+            this._progress.stop();
+            console.error(error);
+            process.exit(1);
+        });
+
+        if (this._config.robots) {
+            for (let userAgent in this._config.robots) {
+                let rules: IRobotRules = this._config.robots[userAgent];
+
+                robotsStream.write(`User-Agent: ${userAgent}\n\n`, (error: Error) => {
+                    if (error) {
+                        this._progress.stop();
+                        console.error(error);
+                        process.exit(1);
+                    }
+                });
+
+                if (rules.disallow) {
+                    for (let i: number = 0; i < rules.disallow.length; i++) {
+                        let disallow: string = rules.disallow[i];
+                        robotsStream.write(`Disallow: ${disallow}\n`, (error: Error) => {
+                            if (error) {
+                                this._progress.stop();
+                                console.error(error);
+                                process.exit(1);
+                            }
+                        });
+                    }
+                }
+            }
+
+            robotsStream.write('\n\n');
+        }
+
+        robotsStream.write(`User-Agent: *\n\nSitemap: ${this._config.domain}/sitemap.txt`);
+
+        await this._endStream(robotsStream);
+
         await Promise.all(this._workerExitPromises);
+
+        let sitemapStream: FileSystem.WriteStream = FileSystem.createWriteStream(Path.resolve(this._outputDir, 'sitemap.txt'));
+
+        for (let i: number = 0; i < this._metadata.files.length; i++) {
+            let file: IMetadataFile = this._metadata.files[i];
+            if (file.sitemap === false) {
+                continue;
+            }
+
+            sitemapStream.write(this._config.domain + file.$uri + '\n');
+        }
+
+        await this._endStream(sitemapStream);
 
         FileSystem.copySync(this._templateAssets, Path.resolve(this._outputDir, 'tassets'));
         FileSystem.copySync(this._assetsDir, Path.resolve(this._outputDir, 'assets'));

@@ -507,13 +507,13 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "71b8c5ae308fdd776c04c10fe74e86adaeaf5b68e345dfa5fea90ace71630768",
-        "signature": "8fed8059bf6183c4833006dd2125c11e0986a0bc156f6120970df3efb3cd3e0d",
+        "version": "e657a56c604edd26d95e09a20a0708d1c4dfd970e7dcb96a941540556773d000",
+        "signature": "601c05fa6bf27b2e1e760b80e3e3d361785780696e5d67aa48f5126e581e38db",
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "9228dccb66bcb8dc1db53d6d3d69daae6d7ec02684524d1c8d4b2c9fbee65a0f",
-        "signature": "4ed36e3e4d7a5529580e75c454e43a67379748cd4275ce466e3c552083119888",
+        "version": "cc659108c1d9a7ecf5473c979ae468e0ab9225801f0c39035fa9fc715241f436",
+        "signature": "2e30bd4e161ec202bec364fb765ad70673e68269ef89088cd0f7f0bc916444c7",
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
@@ -549,6 +549,21 @@
       "../stagen/MarkdownProcessor.ts": {
         "version": "ef3bd2b5e294b5b40602e035b60f6163b90cf72cafae2d36bcc8068053bb6521",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
+      "../stagen/xml/XMLComment.ts": {
+        "version": "18e12718975f569536d52d45ba6164a99c4509a766c3ccbc635a904e3e872d4e",
+        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "affectsGlobalScope": false
+      },
+      "../stagen/xml/XMLDocument.ts": {
+        "version": "0eacc3a74a2676c88e3b79244b78539fe8d3b71ba6ae284e0b2398832875c14f",
+        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "affectsGlobalScope": false
+      },
+      "../stagen/xml/XMLNode.ts": {
+        "version": "745af674d5e680fd08574a3b06880a367b65a10c047e9254ab6e79a61730f5e7",
+        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/eslint-visitor-keys/index.d.ts": {
@@ -812,6 +827,7 @@
         "../node_modules/@types/fs-extra/index.d.ts",
         "../node_modules/@types/node/os.d.ts",
         "../node_modules/@types/node/path.d.ts",
+        "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/worker_threads.d.ts",
         "../node_modules/@types/sass/index.d.ts",
         "../node_modules/tslib/tslib.d.ts",
@@ -1143,7 +1159,10 @@
       "../stagen/MarkdownProcessor.ts",
       "../stagen/Stagen.ts",
       "../stagen/TemplateAPI.ts",
-      "../stagen/WorkerState.ts"
+      "../stagen/WorkerState.ts",
+      "../stagen/xml/XMLComment.ts",
+      "../stagen/xml/XMLDocument.ts",
+      "../stagen/xml/XMLNode.ts"
     ]
   },
   "version": "4.1.3"
