@@ -1,6 +1,6 @@
 tsconfig.json
-.eslintrc.json
+.eslintrc.js
 *.tsbuildinfo
 *.tgz
 *.swp
-
+stagen/MarkdownProcessor.js
