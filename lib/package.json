@@ -3,7 +3,7 @@
     "version": "0.0.0-dev.0",
     "description": "Static Site Generator",
     "bin": {
-        "stagen": "./lib/api.js"
+        "stagen": "./lib/src/api.js"
     },
     "main": "index.js",
     "scripts": {

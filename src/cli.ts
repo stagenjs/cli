@@ -1,5 +1,5 @@
 
-import {arguments, program} from 'commander';
+import {program} from 'commander';
 import * as Path from 'path';
 import {Stagen} from '../stagen/Stagen';
 import {version} from '../package.json';
@@ -37,7 +37,7 @@ program.command('build')
 
         let outputDir: string = null;
         if (args.o) {
-            outputDir = Path.resolve(process.cwd(), program.o);
+            outputDir = Path.resolve(process.cwd(), args.o);
         }
         else {
             outputDir = Path.resolve(rootDir, './public');
@@ -64,7 +64,7 @@ program.command('package [outFile]')
 
         let outputDir: string = null;
         if (args.o) {
-            outputDir = Path.resolve(process.cwd(), program.o);
+            outputDir = Path.resolve(process.cwd(), args.o);
         }
         else {
             outputDir = Path.resolve(rootDir, './public');

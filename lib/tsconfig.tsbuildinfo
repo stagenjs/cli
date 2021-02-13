@@ -527,12 +527,12 @@
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "21b9f94a2282f0e1348cde29c88c2e4d325bedb00589eefe64df561d890cc74a",
+        "version": "a7ad6fa431b697c693cb3e803f56486ef6750284992eadf691734334c1efdfe9",
         "signature": "8749361e45953f1f13dddc8affeccedc4e69666594601f29318edf81080eb5d8",
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "dca18efe8a728a275934971ac7dd5cd2234dad3aa22c9bd7cc8e27714beff1ed",
+        "version": "ab8568b4804ee4202ac90a93d921a383d5c5fc89c011e78b2766af5c8ed8057f",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
