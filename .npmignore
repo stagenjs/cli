@@ -1,0 +1,6 @@
+tsconfig.json
+.eslintrc.json
+*.tsbuildinfo
+*.tgz
+*.swp
+
