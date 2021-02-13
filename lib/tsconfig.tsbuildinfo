@@ -467,12 +467,12 @@
         "affectsGlobalScope": false
       },
       "../stagen/IPacket.ts": {
-        "version": "5c146e71a999d3bbca07d3e7cd57d48d8d1f0cd24d4833d259c9998b50ce5432",
+        "version": "f10689cce24d13864d85fda37055a1168691f6a09cac82190eea6433c92620b9",
         "signature": "ab9517fef0df34bd2ee27f275dff06c4b7f5bc9f9ae0779e67ab29d65a593af0",
         "affectsGlobalScope": false
       },
       "../stagen/WorkerState.ts": {
-        "version": "ca8cb8b0ee744b34bcbdeb9ce015072258d7c0140db9cb5f57c1479004ca1b24",
+        "version": "c37ad08adc17e7e24c6a44f7219687567445c3ea06768e0b6300d88cc1d77a83",
         "signature": "bdad1e45fc7b72365d77663e2cb0f2caed2376889f9f2dbf54934907a71211e3",
         "affectsGlobalScope": false
       },
@@ -522,27 +522,27 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "4afd6b057ab7a94e019c7a0f5e2551fe95a4d006fda732b85c15023ef871d2ca",
+        "version": "e1031ee78571da9291eb8c80319a96369e3c9503d0b879d07c90a8664277098c",
         "signature": "fa64f8c1062afc118211528e998672d3a94790ca6b082b73812937d8a9ca442b",
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "a7ad6fa431b697c693cb3e803f56486ef6750284992eadf691734334c1efdfe9",
-        "signature": "8749361e45953f1f13dddc8affeccedc4e69666594601f29318edf81080eb5d8",
+        "version": "ede217875f2cd3a58e6472880f9324569a19688c68b2e106a7da3cb8d7c2e8ca",
+        "signature": "522458ac334412239e47665320a4c547363b5c9b82872d011f4ceff0f2319596",
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "ee62b8f7f4c75dce63c15beac92178778d1e09cbc37ff8f7fd984be580b1bc53",
+        "version": "8a90856b081c16d27decfab8e98605258434af8f385915d9a65379aa0142954c",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
       "../stagen/ITemplateAPI.ts": {
-        "version": "aac173a9c5721f3be0e923f33c5093c95167976e4cf7d7bd0ebc33a74cf290be",
+        "version": "afc351fd831714765986ce59f33e98aeee65361170144e9b624d7108c6a35d51",
         "signature": "1f4b62d2fb5d7a755400de47703a35aa86684a8ebdc0967d6f0916e18f7ce0e6",
         "affectsGlobalScope": false
       },
       "../stagen/ITemplateProvider.ts": {
-        "version": "f040b02a2e69c91917b23d5ff571b3388ac655337f5569f052d21eaa42cc20dd",
+        "version": "b3c8bf51f167fce836336a66e6fb8a6693dff28f7f650316e0c85f05beee634c",
         "signature": "86141976f93cde605fddd732219854f42503f400894a75397c498e0000aed1b9",
         "affectsGlobalScope": false
       },
@@ -557,27 +557,27 @@
         "affectsGlobalScope": false
       },
       "../stagen/TemplateAPI.ts": {
-        "version": "c5d354d409d07505d8e6c914f9efc26708a3311619951b94d15ed2618f0f32c0",
+        "version": "6b490f8d9ed2171141ee94a60656917e8e84fd11524ee7d18aec02f754cafd08",
         "signature": "2f49c84e55bf0caa07a15b734b62637408f18c73d5d6032050a9986b5a667806",
         "affectsGlobalScope": false
       },
       "../stagen/MarkdownProcessor.ts": {
-        "version": "ef3bd2b5e294b5b40602e035b60f6163b90cf72cafae2d36bcc8068053bb6521",
+        "version": "1828bfc8ac814180ee0b44724c314b27e93f3f4578250a725b7fa69d4d43cec9",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
       "../stagen/xml/XMLComment.ts": {
-        "version": "18e12718975f569536d52d45ba6164a99c4509a766c3ccbc635a904e3e872d4e",
+        "version": "38151628849238f370e42fc4ac80ee7c262d0a7a8480f3a683b3ea0e17c8ee15",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "../stagen/xml/XMLDocument.ts": {
-        "version": "0eacc3a74a2676c88e3b79244b78539fe8d3b71ba6ae284e0b2398832875c14f",
+        "version": "8a01276f0476df2d81485a2f222e0809e69298dbbed463e182b34d343267e5e5",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "../stagen/xml/XMLNode.ts": {
-        "version": "745af674d5e680fd08574a3b06880a367b65a10c047e9254ab6e79a61730f5e7",
+        "version": "92fd3facfa81ad4d01949e3554e55092d00154db9fb5310e0b7192166e0640e0",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
