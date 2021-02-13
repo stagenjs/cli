@@ -532,8 +532,8 @@
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "8a90856b081c16d27decfab8e98605258434af8f385915d9a65379aa0142954c",
-        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "version": "f2f2d469907fb7397b13a94023c5efcf317add31ccdabd150d0e0f3a612ae4d8",
+        "signature": "d95d560e3b6e989ebcabbb7c2d50847135add285ec66cdee71cfaf2ef6ef038b",
         "affectsGlobalScope": false
       },
       "../stagen/ITemplateAPI.ts": {

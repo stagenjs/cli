@@ -1,3 +1,5 @@
+#!/bin/env node
+
 /*
 Copyright [2021] [Norman Breau]
 
