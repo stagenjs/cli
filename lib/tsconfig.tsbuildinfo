@@ -506,18 +506,33 @@
         "signature": "b1071c8eeb8da55bfac2666551ac923320b0c8a76a292ff55de0190ea59e691c",
         "affectsGlobalScope": false
       },
+      "../node_modules/@types/minimatch/index.d.ts": {
+        "version": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633",
+        "signature": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/glob/index.d.ts": {
+        "version": "393137c76bd922ba70a2f8bf1ade4f59a16171a02fb25918c168d48875b0cfb0",
+        "signature": "393137c76bd922ba70a2f8bf1ade4f59a16171a02fb25918c168d48875b0cfb0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/archiver/index.d.ts": {
+        "version": "1290b9127bae7391a0a2ef732da845717eaeab990d6f53b3c092e64bdbe0b42b",
+        "signature": "1290b9127bae7391a0a2ef732da845717eaeab990d6f53b3c092e64bdbe0b42b",
+        "affectsGlobalScope": false
+      },
       "../stagen/Stagen.ts": {
-        "version": "e657a56c604edd26d95e09a20a0708d1c4dfd970e7dcb96a941540556773d000",
-        "signature": "601c05fa6bf27b2e1e760b80e3e3d361785780696e5d67aa48f5126e581e38db",
+        "version": "4a4d69b491a2aa6699c53c27ea2158b5f50055413201668815e046ef7ec03db0",
+        "signature": "1aa1d35e7e23aa5ec69daff566875d131e8f67d082885f63d03214d4c6f95a29",
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "cc659108c1d9a7ecf5473c979ae468e0ab9225801f0c39035fa9fc715241f436",
-        "signature": "2e30bd4e161ec202bec364fb765ad70673e68269ef89088cd0f7f0bc916444c7",
+        "version": "21b9f94a2282f0e1348cde29c88c2e4d325bedb00589eefe64df561d890cc74a",
+        "signature": "8749361e45953f1f13dddc8affeccedc4e69666594601f29318edf81080eb5d8",
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "395744b68b7ed60f8bb394d2c55ce6a49d89598ea61d40316de641a221123122",
+        "version": "dca18efe8a728a275934971ac7dd5cd2234dad3aa22c9bd7cc8e27714beff1ed",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -595,11 +610,22 @@
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
+      "../node_modules/@types/archiver/index.d.ts": [
+        "../node_modules/@types/glob/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
+        "../node_modules/@types/node/zlib.d.ts"
+      ],
       "../node_modules/@types/cli-progress/index.d.ts": [
         "../node_modules/@types/node/index.d.ts"
       ],
       "../node_modules/@types/fs-extra/index.d.ts": [
         "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/glob/index.d.ts": [
+        "../node_modules/@types/minimatch/index.d.ts",
+        "../node_modules/@types/node/events.d.ts",
         "../node_modules/@types/node/index.d.ts"
       ],
       "../node_modules/@types/node/base.d.ts": [
@@ -823,11 +849,11 @@
         "../stagen/WorkerState.ts"
       ],
       "../stagen/Stagen.ts": [
+        "../node_modules/@types/archiver/index.d.ts",
         "../node_modules/@types/cli-progress/index.d.ts",
         "../node_modules/@types/fs-extra/index.d.ts",
         "../node_modules/@types/node/os.d.ts",
         "../node_modules/@types/node/path.d.ts",
-        "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/worker_threads.d.ts",
         "../node_modules/@types/sass/index.d.ts",
         "../node_modules/tslib/tslib.d.ts",
@@ -845,11 +871,22 @@
       ]
     },
     "exportedModulesMap": {
+      "../node_modules/@types/archiver/index.d.ts": [
+        "../node_modules/@types/glob/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
+        "../node_modules/@types/node/zlib.d.ts"
+      ],
       "../node_modules/@types/cli-progress/index.d.ts": [
         "../node_modules/@types/node/index.d.ts"
       ],
       "../node_modules/@types/fs-extra/index.d.ts": [
         "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/glob/index.d.ts": [
+        "../node_modules/@types/minimatch/index.d.ts",
+        "../node_modules/@types/node/events.d.ts",
         "../node_modules/@types/node/index.d.ts"
       ],
       "../node_modules/@types/node/base.d.ts": [
@@ -1048,11 +1085,14 @@
       ]
     },
     "semanticDiagnosticsPerFile": [
+      "../node_modules/@types/archiver/index.d.ts",
       "../node_modules/@types/cli-progress/index.d.ts",
       "../node_modules/@types/ejs/index.d.ts",
       "../node_modules/@types/eslint-visitor-keys/index.d.ts",
       "../node_modules/@types/fs-extra/index.d.ts",
+      "../node_modules/@types/glob/index.d.ts",
       "../node_modules/@types/json-schema/index.d.ts",
+      "../node_modules/@types/minimatch/index.d.ts",
       "../node_modules/@types/node/assert.d.ts",
       "../node_modules/@types/node/async_hooks.d.ts",
       "../node_modules/@types/node/base.d.ts",

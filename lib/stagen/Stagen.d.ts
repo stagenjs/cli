@@ -39,5 +39,7 @@ export declare class Stagen {
     private _processMetadataItem;
     private _processPage;
     private _onWorkerIdle;
+    package(outFile: string): Promise<void>;
+    private _getDefaultOutfileName;
     private _scanForPages;
 }

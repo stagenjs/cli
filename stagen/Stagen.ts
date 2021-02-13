@@ -8,7 +8,7 @@ import {WorkerState} from './WorkerState';
 import {Bar, Presets} from 'cli-progress';
 import * as YAML from 'yaml';
 import * as Sass from 'sass';
-import {promisify} from 'util';
+import * as Archiver from 'archiver';
 
 enum ProcessingState {
     METADATA,
@@ -459,6 +459,33 @@ export class Stagen {
                 }
                 break;
         }
+    }
+
+    public async package(outFile: string): Promise<void> {
+        if (!outFile) {
+            outFile = this._getDefaultOutfileName();
+        }
+
+        if (!FileSystem.existsSync(this._outputDir)) {
+            throw new Error('Directory doesn\'t exists. Have you built your website yet?');
+        }
+
+        let archive: Archiver.Archiver = Archiver('tar', {
+            statConcurrency: this._getWorkerCount(),
+            gzip: true
+        });
+
+        let fstream: FileSystem.WriteStream = FileSystem.createWriteStream(Path.resolve(process.cwd(), outFile));
+        archive.pipe(fstream);
+
+        archive.directory(this._outputDir, false);
+        await archive.finalize();
+    }
+
+    private _getDefaultOutfileName() {
+        let date: Date = new Date();
+        let name: string = encodeURIComponent(this._config.name.toLowerCase());
+        return `${name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.tar.gz`;
     }
     
     private _scanForPages(dir: string): Array<string> {
