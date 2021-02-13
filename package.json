@@ -22,6 +22,7 @@
   "homepage": "https://github.com/stagenjs/cli#readme",
   "dependencies": {
     "@breautek/iterator": "^3.0.1",
+    "@stagen/default-template": "file:../default-template/stagen-default-template-0.0.1.tgz",
     "archiver": "^5.2.0",
     "cli-progress": "^3.8.2",
     "commander": "^6.2.1",
