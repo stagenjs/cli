@@ -1,3 +1,4 @@
+import * as Archiver from 'archiver';
 export declare class Stagen {
     private _rootDir;
     private _srcDir;
@@ -39,7 +40,6 @@ export declare class Stagen {
     private _processMetadataItem;
     private _processPage;
     private _onWorkerIdle;
-    package(outFile: string): Promise<void>;
-    private _getDefaultOutfileName;
+    package(): Promise<Archiver.Archiver>;
     private _scanForPages;
 }

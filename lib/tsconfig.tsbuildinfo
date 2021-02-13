@@ -522,8 +522,8 @@
         "affectsGlobalScope": false
       },
       "../stagen/Stagen.ts": {
-        "version": "4a4d69b491a2aa6699c53c27ea2158b5f50055413201668815e046ef7ec03db0",
-        "signature": "1aa1d35e7e23aa5ec69daff566875d131e8f67d082885f63d03214d4c6f95a29",
+        "version": "4afd6b057ab7a94e019c7a0f5e2551fe95a4d006fda732b85c15023ef871d2ca",
+        "signature": "fa64f8c1062afc118211528e998672d3a94790ca6b082b73812937d8a9ca442b",
         "affectsGlobalScope": false
       },
       "../package.json": {
@@ -532,7 +532,7 @@
         "affectsGlobalScope": true
       },
       "../src/cli.ts": {
-        "version": "ab8568b4804ee4202ac90a93d921a383d5c5fc89c011e78b2766af5c8ed8057f",
+        "version": "ee62b8f7f4c75dce63c15beac92178778d1e09cbc37ff8f7fd984be580b1bc53",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -820,9 +820,14 @@
         "../node_modules/yaml/types.d.ts"
       ],
       "../src/cli.ts": [
+        "../node_modules/@types/archiver/index.d.ts",
+        "../node_modules/@types/node/dgram.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/path.d.ts",
         "../node_modules/commander/typings/index.d.ts",
         "../node_modules/tslib/tslib.d.ts",
+        "../node_modules/yaml/index.d.ts",
         "../package.json",
         "../stagen/Stagen.ts"
       ],
@@ -1079,6 +1084,9 @@
         "../node_modules/yaml/index.d.ts",
         "../node_modules/yaml/parse-cst.d.ts",
         "../node_modules/yaml/types.d.ts"
+      ],
+      "../stagen/Stagen.ts": [
+        "../node_modules/@types/archiver/index.d.ts"
       ],
       "../stagen/TemplateAPI.ts": [
         "../stagen/ITemplateAPI.ts"
