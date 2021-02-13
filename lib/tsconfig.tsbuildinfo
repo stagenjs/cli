@@ -527,7 +527,7 @@
         "affectsGlobalScope": false
       },
       "../package.json": {
-        "version": "ede217875f2cd3a58e6472880f9324569a19688c68b2e106a7da3cb8d7c2e8ca",
+        "version": "160d6e4c0369097ef26f4fd67d4ed8922c3b46e2e58f2d563e15050f61e9e5d3",
         "signature": "522458ac334412239e47665320a4c547363b5c9b82872d011f4ceff0f2319596",
         "affectsGlobalScope": true
       },
