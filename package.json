@@ -6,8 +6,8 @@
     "stagen": "./lib/src/cli.js"
   },
   "publishConfig": {
-	"access": "public",
-	"registry": "https://registry.npmjs.org"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/stagenjs/cli#readme",
   "dependencies": {
     "@breautek/iterator": "^3.0.1",
-    "@stagen/default-template": "0.0.2",
+    "@stagen/default-template": "^0.0.3",
     "archiver": "^5.2.0",
     "cli-progress": "^3.8.2",
     "commander": "^6.2.1",
