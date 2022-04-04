@@ -5,6 +5,10 @@
   "bin": {
     "stagen": "./lib/src/cli.js"
   },
+  "publishConfig": {
+	"access": "public",
+	"registry": "https://registry.npmjs.org"
+  },
   "main": "index.js",
   "scripts": {
     "build": "tsc",
